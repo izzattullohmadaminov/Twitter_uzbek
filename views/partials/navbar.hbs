@@ -2,22 +2,24 @@
   <div class="container mx-auto flex items-center justify-between">
     <a class="text-3xl" href="/">Holid27</a>
     <ul class="flex items-center gap-5">
-      <li>
-        <a href="/diary/my">my Diary</a>
-      </li>
-      <li>
-        <a href="">Lenta</a>
-      </li>
-      <li>
-        <a href="">my Profile</a>
-      </li>
-      <li>
-        <a href="">Logout</a>
-      </li>
-      <li>
-        <a href="/auth/login">Login</a>
-      </li>
-
+      {{#if isAuthenticated}}
+        <li>
+          <a href="/diary/my">my Diary</a>
+        </li>
+        <li>
+          <a href="/diary/all">Lenta</a>
+        </li>
+        <li>
+          <a href="/user/myprofile">my Profile</a>
+        </li>
+        <li>
+          <a href="/auth/logout">Logout</a>
+        </li>
+      {{else}}
+        <li>
+          <a href="/auth/login">Login</a>
+        </li>
+      {{/if}}
     </ul>
   </div>
 </nav>

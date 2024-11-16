@@ -1,0 +1,44 @@
+<main>
+  <div class="container mx-auto py-3">
+    <div class="flex justify-start gap-7 m-5">
+      {{#if diaries}}
+        {{#each diaries}}
+          <div class="w-[30%] border p-2 rounded">
+            <div
+              class="flex py-1 px-2 border-b flex items-center justify-between"
+            >
+              <div class="flex item-center">
+                <img
+                  class="w-[10%] object-cover mx-2"
+                  src="https://img.freepik.com/premium-vector/bearded-man-avatar-man-vector-portrait_9385-36.jpg"
+                  alt=""
+                />
+                <h1 class="text-2xl">{{users.name}}</h1>
+              </div>
+
+            </div>
+            <div class="my-3 m-h-[300px]">
+              <div>
+                <img src="{{imageUrl}}" alt="" class="rounded" />
+                <div class="flex my-2 items-center gap-2">
+                  <a
+                    href="/diary/open/{{id}}"
+                    class="px-4 py-2 bg-green-500 text-white rounded w-full text-center"
+                  >
+                    Open</a>
+                </div>
+              </div>
+              <div>
+                <p class="py-2">{{text}}</p>
+              </div>
+              <p class="text-[10px] text-gray-400">{{createdAt}}</p>
+            </div>
+
+          </div>
+        {{/each}}
+      {{else}}
+        <h1>No diary added yet</h1>
+      {{/if}}
+    </div>
+  </div>
+</main>

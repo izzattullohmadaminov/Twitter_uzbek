@@ -3,13 +3,25 @@ const express = require("express");
 const dotenv = require("dotenv");
 const { create } = require("express-handlebars");
 const path = require("path");
+const pool = require("./config/db");
 const db = require("./model");
-
+const session = require("express-session");
+const PgSession = require("connect-pg-simple")(session);
 // Initialize express
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+app.use(
+  session({
+    store: new PgSession({
+      pool: pool,
+      tableName: "users_sessions",
+    }),
+    secret: "your secret key",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 // Initial env  variables
 dotenv.config();
 // Initialize template engine (handlebars)
@@ -27,6 +39,10 @@ app.set("views", "./views");
 app.use("/diary", require("./router/diary.router"));
 // Auth router
 app.use("/auth", require("./router/auth.router"));
+// User router
+app.use("/user", require("./router/user.router"));
+
+// Static files
 const port = process.env.PORT || 3001;
 const start = async () => {
   try {

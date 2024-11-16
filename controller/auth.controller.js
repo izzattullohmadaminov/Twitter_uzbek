@@ -7,7 +7,11 @@ const User = db.user;
 // Access  Public
 const getLogin = async (req, res) => {
   try {
-    res.render("auth/login", {});
+    const isAuthenticated = req.session.isLogged;
+    res.render("auth/login", {
+      title: "Login",
+      isAuthenticated,
+    });
   } catch (err) {
     console.log(err);
   }
@@ -23,10 +27,16 @@ const postLogin = async (req, res) => {
       return res.redirect("/auth/login");
     }
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    if (isMatch) {
+      req.session.isLogged = true;
+      req.session.user = user;
+      req.session.save((err) => {
+        if (err) throw err;
+        return res.redirect("/diary/my");
+      });
+    } else {
       return res.redirect("/auth/login");
     }
-    res.redirect("/diary/my");
   } catch (err) {
     console.log(err);
   }
@@ -73,10 +83,20 @@ const postRegister = async (req, res) => {
     console.log(err);
   }
 };
+//Desc      Logout user
+//Route     POST /auth/logout
+//Access    Private
+const logout = (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/auth/login");
+  });
+};
+
 
 module.exports = {
   getLogin,
   getRegister,
   postRegister,
   postLogin,
+  logout,
 };

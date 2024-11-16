@@ -6,7 +6,7 @@
         alt=""
         class="w-[5%]"
       />
-      <h1 class="text-3xl">UserName</h1>
+      <h1 class="text-3xl">{{diary.users.name}}</h1>
     </div>
     {{#if diary.imageUrl}}
       <img src="{{diary.imageUrl}}" class="w-full rounded p-5" alt="" />
@@ -22,7 +22,7 @@
       <div class="border m-5 rounded">
         <div class="flex items-center bg-gray-200 p-2 gap-2">
           <img src="https://img.freepik.com/premium-vector/bearded-man-avatar-man-vector-portrait_9385-36.jpg" class="w-[5%]" alt="">
-          <h1>UserName</h1>
+          <h1>{{name}}</h1>
         </div>
          <div class="py-2 px-4">
            <p>
@@ -34,7 +34,7 @@
       </div>
     {{/each}}
     {{else}}
-    <p>No comment added yet</p>
+    <p class="p-5">No comment added yet</p>
     {{/if}}
     </div>
     <div class="border-t">

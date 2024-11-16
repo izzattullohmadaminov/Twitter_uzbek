@@ -1,14 +1,17 @@
 const db = require("../model/index");
 const Diary = db.diary;
 const Comment = db.comment;
+const User = db.user;
 // Desc    Diary page
 // Method  GET /diary/my
 // Access  Private
 const getMyDiary = async (req, res) => {
   try {
     const diaries = await Diary.findAll({
+      where: { userId: req.session.user.id },
       raw: true,
       plain: false,
+      include: ["users"],
       nest: true,
     });
     const formattedDiaries = diaries.map((diary) => ({
@@ -36,6 +39,7 @@ const addNewDiary = async (req, res) => {
       await Diary.create({
         text,
         imageUrl,
+        userId: req.session.user.id,
       });
       res.redirect("/diary/my");
     } else {
@@ -68,7 +72,7 @@ const getDiaryById = async (req, res) => {
     const data = await Diary.findByPk(req.params.id, {
       raw: false,
       plain: true,
-      include: ["comments"],
+      include: ["comments", "users"],
       nest: true,
     });
     const diary = await data.toJSON();
@@ -76,6 +80,7 @@ const getDiaryById = async (req, res) => {
       title: "Diary",
       diary: diary,
       comments: diary.comments,
+      isAuthenticated: req.session.isLogged,
     });
   } catch (err) {
     console.log(err);
@@ -117,18 +122,45 @@ const updateDiary = async (req, res) => {
 // Method  POST /diary/comment/:id
 // Access  Private
 const addCommentToDiary = async (req, res) => {
+  const user = User.findByPk(req.session.user.id);
+  if (req.body.comment.length === 0 || req.body.comment.trim().length === 0) {
+    return res.redirect(`/diary/open/${req.params.id}`);
+  }
   try {
     await Comment.create({
-      name: "admin",
+      name: req.session.user.name,
       comment: req.body.comment,
       diaryId: req.params.id,
+      userId: user.id,
     });
     await res.redirect(`/diary/open/${req.params.id}`);
   } catch (err) {
     console.error(err);
   }
 };
-
+//Desc      All Diaries
+//Route     POST /diary/all
+//Access    Public
+const getAllDiary = async (req, res) => {
+  try {
+    const diaries = await Diary.findAll({
+      raw: true,
+      plain: false,
+      include: ["users"],
+      nest: true,
+    });
+    if (!diaries) {
+      return res.redirect("/diary/my");
+    }
+    res.render("diary/all-diary", {
+      title: "All Diaries",
+      diaries: diaries.reverse(),
+      isAuthenticated: req.session.isLogged,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
 module.exports = {
   getMyDiary,
   addNewDiary,
@@ -137,4 +169,5 @@ module.exports = {
   updateDiaryPage,
   updateDiary,
   addCommentToDiary,
+  getAllDiary,
 };

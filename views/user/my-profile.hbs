@@ -1,0 +1,60 @@
+<main>
+  <div class="container mx-auto my-5">
+    <h1 class="text-3xl text-center">My Profile</h1>
+    <div class="flex justify-between items-center gap-5">
+      <div
+        class="border py-[50px] px-5 rounded flex items-center gap-5 my-2 w-[50%]"
+      >
+        <img
+          src="https://img.freepik.com/premium-vector/bearded-man-avatar-man-vector-portrait_9385-36.jpg"
+          alt=""
+          class="w-[20%] object-cover mx-2"
+        />
+        <div class="flex flex-col gap-6">
+          <h1 class="text-3xl"> user :{{user.name}}</h1>
+          <h1 class="text-3xl">email : {{user.email}}</h1>
+          <h1 class="text-3xl">diary count : {{diaryCount}}</h1>
+        </div>
+      </div>
+      <div class="my-5 w-[50%] border p-5 rounded w-[50%]">
+        <form action="/user/update" method="post">
+          <div class="flex flex-col gap-2">
+            <label for="name">Name</label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              class="rounded"
+              value="{{user.name}}"
+            />
+          </div>
+          <div class="flex flex-col gap-2">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              class="rounded"
+              value="{{user.email}}"
+            />
+          </div>
+          <div class="flex flex-col gap-2">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              class="rounded"
+            />
+          </div>
+          <button
+            type="submit"
+            class="mt-5 px-4 py-2 bg-blue-600 text-white rounded"
+          >
+            Update
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
