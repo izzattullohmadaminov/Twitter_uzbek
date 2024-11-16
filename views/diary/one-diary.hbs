@@ -1,0 +1,52 @@
+<main class="container mx-auto flex justify-between gap-10 mt-10">
+  <div class="w-[60%] border rounded">
+    <div class="flex items-center border-b my-2 p-5">
+      <img
+        src="https://img.freepik.com/premium-vector/bearded-man-avatar-man-vector-portrait_9385-36.jpg"
+        alt=""
+        class="w-[5%]"
+      />
+      <h1 class="text-3xl">UserName</h1>
+    </div>
+    {{#if diary.imageUrl}}
+      <img src="{{diary.imageUrl}}" class="w-full rounded p-5" alt="" />
+    {{/if}}
+    <p class="my-4 p-5">{{diary.text}}</p>
+    <p class="text-gray-400 px-5">{{diary.createdAt}}</p>
+  </div>
+  <div class="w-[40%] border rounded">
+    <h1 class="p-5 border-b text-3xl">Can your write comment</h1>
+    <div class="h-[60vh] overflow-y-auto">
+    {{#if diary.comments}}
+    {{#each diary.comments}}
+      <div class="border m-5 rounded">
+        <div class="flex items-center bg-gray-200 p-2 gap-2">
+          <img src="https://img.freepik.com/premium-vector/bearded-man-avatar-man-vector-portrait_9385-36.jpg" class="w-[5%]" alt="">
+          <h1>UserName</h1>
+        </div>
+         <div class="py-2 px-4">
+           <p>
+            {{comment}}
+          </p>
+          <p class="text-right text-gray-400">{{createdAt}}</p>
+         </div>
+         
+      </div>
+    {{/each}}
+    {{else}}
+    <p>No comment added yet</p>
+    {{/if}}
+    </div>
+    <div class="border-t">
+      <form
+        action="/diary/comment/{{diary.id}}"
+        method="post"
+        class="flex  item-center p-5 gap-2"
+        enctype="application/x-www-form-urlencoded"
+      >
+        <textarea type="text" class="w-full p-2 rounded resize-none" name="comment"/> </textarea>
+        <button type="submit" class="bg-blue-600 px-4 py-2 text-white rounded">Add</button>
+      </for>
+    </div>
+  </div>
+</main>

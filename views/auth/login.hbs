@@ -1,0 +1,15 @@
+<main>
+    <div class="flex justify-center items-center h-[70vh]">
+        <form action="/auth/login" method="post" class="w-[600px] border p-5 rounded">
+            <div class="flex flex-col gap-2">
+                <label for="email">Email</label>
+                <input type="text" name="email" id="email" class="rounded">
+            </div>
+            <div class="flex flex-col gap-2 mt-5">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" class="rounded">
+            </div>
+            <button type="submit" class="mt-5 px-4 py-2 bg-blue-600 text-white rounded">Login</button> <br>
+            <a href="/auth/register" class="mt-5 "> Haven't account ? Please <span class="text-blue-600">Register</span></a>
+        </form>
+</main>

@@ -1,0 +1,28 @@
+<main class="container mx-auto">
+  <div>
+    <form
+      action="/diary/update/{{diary.id}} "
+      method="post"
+      enctype="application/x-www-form-urlencoded"
+    >
+      <div class="flex flex-col gap-2 mt-5">
+        <label for="imageUrl">Your Image URL</label>
+
+      </div>
+      <div class="flex flex-col gap-2 mt-5">
+        <label for="text">Title</label>
+        <textarea
+          name="text"
+          id="text"
+          cols="30"
+          rows="10"
+          class="rounded"
+        >{{diary.text}}</textarea>
+      </div>
+      <button
+        type="submit"
+        class="mt-5 px-4 py-2 bg-blue-600 text-white rounded"
+      >Update</button>
+    </form>
+  </div>
+</main>
