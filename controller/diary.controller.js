@@ -13,6 +13,7 @@ const getMyDiary = async (req, res) => {
       plain: false,
       include: ["users"],
       nest: true,
+      csrfToken: req.csrfToken(),
     });
     const formattedDiaries = diaries.map((diary) => ({
       ...diary,

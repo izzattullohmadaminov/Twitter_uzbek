@@ -1,17 +1,38 @@
 <main>
-  <div class="flex justify-center items-center h-[70vh]">
-    <form action="/auth/register" method="post" class="w-[400px]">
+  <div class="flex justify-center flex-col items-center h-[70vh]">
+    {{#if error}}
+      <div class="text-red-600">{{error}}</div>
+    {{/if}}
+    <form action="/auth/register" method="post" class="w-[400px] flex flex-col">
       <div class="flex flex-col gap-2">
         <label for="email">Email</label>
-        <input type="text" name="email" id="email" class="rounded" />
+        <input
+          type="text"
+          name="email"
+          id="email"
+          class="rounded"
+          value="{{oldInput.email}}"
+        />
       </div>
       <div class="flex flex-col gap-2 mt-5">
         <label for="name">Name</label>
-        <input type="text" name="name" id="name" class="rounded" />
+        <input
+          type="text"
+          name="name"
+          id="name"
+          class="rounded"
+          value="{{oldInput.name}}"
+        />
       </div>
       <div class="flex flex-col gap-2 mt-5">
         <label for="password">Password</label>
-        <input type="password" name="password" id="password" class="rounded" />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          class="rounded"
+          value="{{oldInput.password}}"
+        />
       </div>
       <div class="flex flex-col gap-2 mt-5">
         <label for="confirmPassword">Confirm Password</label>
@@ -20,8 +41,11 @@
           name="confirmPassword"
           id="confirmPassword"
           class="rounded"
+          value="{{oldInput.confirmPassword}}"
         />
       </div>
+      <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+
       <button
         type="submit"
         class="mt-5 px-4 py-2 bg-blue-600 text-white rounded"

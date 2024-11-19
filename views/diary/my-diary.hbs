@@ -20,6 +20,7 @@
           class="rounded"
         ></textarea>
       </div>
+      <input type="hidden" name="_csrf" value="{{csrfToken}}" />
       <button
         type="submit"
         class="mt-5 px-4 py-2 bg-blue-600 text-white rounded"
@@ -51,6 +52,8 @@
                 <div class="flex my-2 items-center gap-2">
                   <form action="/diary/delete/{{id}}" method="post">
                     <button class="px-4 py-2 bg-red-500 text-white rounded">
+                      <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+
                       <i class="bx bxs-trash"></i></button>
                   </form>
 

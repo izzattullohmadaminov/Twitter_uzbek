@@ -2,6 +2,7 @@
 const bcrypt = require("bcryptjs");
 const db = require("../model/index");
 const User = db.user;
+const { validationResult } = require("express-validator");
 // Desc    Login page
 // Method  GET /auth/login
 // Access  Public
@@ -12,6 +13,7 @@ const getLogin = async (req, res) => {
       title: "Login",
       isAuthenticated,
       error: req.flash("error"),
+      success: req.flash("success"),
     });
   } catch (err) {
     console.log(err);
@@ -23,22 +25,41 @@ const getLogin = async (req, res) => {
 const postLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ where: { email }, raw: true });
-    if (!user) {
-      res.redirect("/auth/login");
-      req.flash("error", "User not found");
-    }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (isMatch) {
-      req.session.isLogged = true;
-      req.session.user = user;
-      req.session.save((err) => {
-        if (err) throw err;
-        return res.redirect("/diary/my");
+    const isAuthenticated = req.session.isLogged;
+    const error = validationResult(req);
+    if (email.trim().length === 0 || password.trim().length === 0) {
+      return res.status(400).render("auth/login", {
+        error: "Please enter email and password",
+        title: "Login",
+        isAuthenticated,
       });
     } else {
-      req.flash("error", "Incorrect password");
-      return res.redirect("/auth/login");
+      if (!error.isEmpty()) {
+        return res.status(400).render("auth/login", {
+          error: error.array()[0].msg,
+          title: "Login",
+          isAuthenticated,
+        });
+      }
+      const user = await User.findOne({ where: { email }, raw: true });
+      if (user) {
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (isMatch) {
+          req.session.isLogged = true;
+          req.session.user = user;
+          req.flash("success", "Login successful");
+          req.session.save((err) => {
+            if (err) throw err;
+            return res.redirect("/diary/my");
+          });
+        } else {
+          req.flash("error", "Incorrect password");
+          return res.redirect("/auth/login");
+        }
+      } else {
+        req.flash("error", "User not found");
+        return res.redirect("/auth/login");
+      }
     }
   } catch (err) {
     req.flash("error", "Something went wrong");
@@ -62,7 +83,16 @@ const getRegister = async (req, res) => {
 const postRegister = async (req, res) => {
   try {
     const { email, name, password, confirmPassword } = req.body;
-
+    const error = validationResult(req);
+    const isAuthenticated = req.session.isLogged;
+    if (!error.isEmpty()) {
+      return res.status(400).render("auth/register", {
+        error: error.array()[0].msg,
+        title: "Register",
+        isAuthenticated,
+        oldInput: { email, name, password, confirmPassword },
+      });
+    }
     if (password !== confirmPassword) {
       return res.redirect("/auth/register");
     }

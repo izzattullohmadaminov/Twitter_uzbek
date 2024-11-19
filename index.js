@@ -8,6 +8,7 @@ const db = require("./model");
 const session = require("express-session");
 const PgSession = require("connect-pg-simple")(session);
 const flash = require("connect-flash");
+const csrf = require("csurf");
 // Initialize express
 const app = express();
 app.use(express.json());
@@ -25,6 +26,7 @@ app.use(
   })
 );
 app.use(flash());
+app.use(csrf());
 // Initial env  variables
 dotenv.config();
 // Initialize template engine (handlebars)
@@ -40,6 +42,11 @@ app.set("views", "./views");
 
 // Diary router
 app.use("/diary", require("./router/diary.router"));
+app.use((req, res, next) => {
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
+
 // Auth router
 app.use("/auth", require("./router/auth.router"));
 // User router
