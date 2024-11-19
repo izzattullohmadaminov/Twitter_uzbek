@@ -7,9 +7,10 @@ const {
   postLogin,
   logout,
 } = require("../controller/auth.controller");
-router.get("/login", getLogin);
-router.get("/register", getRegister);
-router.post("/register", postRegister);
-router.post("/login", postLogin);
-router.get("/logout", logout);
+const { protected, unprotected } = require("../middlewares/auth");
+router.get("/login", unprotected, getLogin);
+router.get("/register", unprotected, getRegister);
+router.post("/register", unprotected, postRegister);
+router.post("/login", unprotected, postLogin);
+router.get("/logout", protected, logout);
 module.exports = router;

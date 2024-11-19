@@ -7,10 +7,12 @@ const pool = require("./config/db");
 const db = require("./model");
 const session = require("express-session");
 const PgSession = require("connect-pg-simple")(session);
+const flash = require("connect-flash");
 // Initialize express
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 app.use(
   session({
     store: new PgSession({
@@ -22,6 +24,7 @@ app.use(
     saveUninitialized: false,
   })
 );
+app.use(flash());
 // Initial env  variables
 dotenv.config();
 // Initialize template engine (handlebars)

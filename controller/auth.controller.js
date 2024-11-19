@@ -11,6 +11,7 @@ const getLogin = async (req, res) => {
     res.render("auth/login", {
       title: "Login",
       isAuthenticated,
+      error: req.flash("error"),
     });
   } catch (err) {
     console.log(err);
@@ -24,7 +25,8 @@ const postLogin = async (req, res) => {
   try {
     const user = await User.findOne({ where: { email }, raw: true });
     if (!user) {
-      return res.redirect("/auth/login");
+      res.redirect("/auth/login");
+      req.flash("error", "User not found");
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
@@ -35,9 +37,11 @@ const postLogin = async (req, res) => {
         return res.redirect("/diary/my");
       });
     } else {
+      req.flash("error", "Incorrect password");
       return res.redirect("/auth/login");
     }
   } catch (err) {
+    req.flash("error", "Something went wrong");
     console.log(err);
   }
 };
@@ -91,7 +95,6 @@ const logout = (req, res) => {
     res.redirect("/auth/login");
   });
 };
-
 
 module.exports = {
   getLogin,

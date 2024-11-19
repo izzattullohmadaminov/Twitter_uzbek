@@ -10,13 +10,14 @@ const {
   addCommentToDiary,
   getAllDiary,
 } = require("../controller/diary.controller");
-router.post("/delete/:id", deleteDiary);
-router.get("/open/:id", getDiaryById);
-router.get("/update/:id", updateDiaryPage);
-router.post("/update/:id", updateDiary);
-router.post("/comment/:id", addCommentToDiary);
-router.get("/my", getMyDiary);
-router.post("/add", addNewDiary);
-router.get("/all", getAllDiary);
+const { protected } = require("../middlewares/auth");
+router.post("/delete/:id", protected, deleteDiary);
+router.get("/open/:id", protected, getDiaryById);
+router.get("/update/:id", protected, updateDiaryPage);
+router.post("/update/:id", protected, updateDiary);
+router.post("/comment/:id", protected, addCommentToDiary);
+router.get("/my", protected, getMyDiary);
+router.post("/add", protected, addNewDiary);
+router.get("/all", protected, getAllDiary);
 
 module.exports = router;
